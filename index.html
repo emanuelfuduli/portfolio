@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Emanuel Fuduli — Backend & Frontend Developer. Estudiante de Ingeniería Informática apasionado por la IA."/>
+<title>Emanuel Fuduli — Portfolio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2338bdf8'/><text y='.9em' font-size='70' font-family='sans-serif' font-weight='bold' fill='%2307090f'>EF</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root[data-theme="dark"]{--bg:#07090f;--bg2:#0d1117;--bg3:#111827;--accent:#38bdf8;--accent2:#818cf8;--text:#e2e8f0;--muted:#64748b;--border:#1e2a3a;--card:#0f1923;--surface:rgba(255,255,255,.03);--toggle-bg:#1e2a3a;}
+:root[data-theme="light"]{--bg:#f5f5f5;--bg2:#ececec;--bg3:#e0e0e0;--accent:#374151;--accent2:#6b7280;--text:#111111;--muted:#6b7280;--border:#d1d5db;--card:#ffffff;--surface:rgba(0,0,0,.03);--toggle-bg:#d1d5db;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;overflow-x:hidden;transition:background .3s,color .3s;}
+.sidebar{width:72px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:24px 0;gap:6px;position:fixed;left:0;top:0;z-index:200;transition:background .3s,border-color .3s;}
+.logo{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;margin-bottom:20px;flex-shrink:0;transition:background .3s;}
+[data-theme="dark"] .logo{background:linear-gradient(135deg,#38bdf8,#818cf8);}
+[data-theme="light"] .logo{background:#111111;}
+.nav-btn{width:44px;height:44px;border-radius:12px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;position:relative;}
+[data-theme="dark"] .nav-btn:hover,[data-theme="dark"] .nav-btn.active{background:rgba(56,189,248,.12);color:#38bdf8;}
+[data-theme="light"] .nav-btn:hover,[data-theme="light"] .nav-btn.active{background:rgba(0,0,0,.07);color:#374151;}
+.nav-btn svg{width:18px;height:18px;}
+.tooltip{position:absolute;left:56px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:12px;padding:4px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transform:translateX(-6px);transition:all .15s;z-index:300;}
+.nav-btn:hover .tooltip{opacity:1;transform:translateX(0);}
+.sidebar-bottom{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.theme-toggle{width:44px;height:26px;border-radius:13px;background:var(--toggle-bg);border:1px solid var(--border);cursor:pointer;position:relative;transition:all .3s;flex-shrink:0;}
+[data-theme="dark"] .theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#38bdf8;transition:transform .3s;}
+[data-theme="light"] .theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#374151;transform:translateX(18px);transition:transform .3s;}
+.main{margin-left:72px;flex:1;min-height:100vh;}
+.page{display:none;min-height:100vh;padding:48px 56px;}
+.page.active{display:block;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-scale{opacity:0;transform:scale(.94);transition:opacity .5s ease,transform .5s ease;}
+.reveal-scale.visible{opacity:1;transform:scale(1);}
+.delay-1{transition-delay:.1s;}.delay-2{transition-delay:.2s;}.delay-3{transition-delay:.3s;}.delay-4{transition-delay:.4s;}.delay-5{transition-delay:.5s;}
+.hero{display:flex;flex-direction:column;justify-content:center;min-height:100vh;max-width:780px;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:28px;width:fit-content;transition:all .3s;}
+[data-theme="dark"] .hero-tag{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#38bdf8;}
+[data-theme="light"] .hero-tag{background:rgba(55,65,81,.08);border:1px solid rgba(55,65,81,.2);color:#374151;}
+.tag-dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite;}
+[data-theme="dark"] .tag-dot{background:#38bdf8;}
+[data-theme="light"] .tag-dot{background:#374151;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(38px,5.5vw,68px);font-weight:800;line-height:1.05;margin-bottom:6px;color:var(--text);}
+[data-theme="dark"] .grad{background:linear-gradient(90deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+[data-theme="light"] .grad{background:linear-gradient(90deg,#111111,#6b7280);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.role{font-family:'Syne',sans-serif;font-size:clamp(15px,2vw,22px);font-weight:400;color:var(--muted);margin-bottom:20px;}
+.desc{font-size:15px;line-height:1.75;color:var(--muted);max-width:520px;margin-bottom:28px;}
+.tech-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.chip{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);font-size:12px;font-weight:500;color:var(--text);transition:all .18s;cursor:default;}
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+.chip-dot{width:7px;height:7px;border-radius:50%;}
+.edu-strip{display:flex;align-items:center;gap:10px;margin-bottom:28px;padding:10px 16px;border-radius:10px;width:fit-content;transition:all .3s;}
+[data-theme="dark"] .edu-strip{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.15);}
+[data-theme="light"] .edu-strip{background:rgba(107,114,128,.08);border:1px solid rgba(107,114,128,.2);}
+.edu-strip svg{width:15px;height:15px;color:var(--accent2);flex-shrink:0;}
+.edu-text{font-size:13px;color:var(--text);}
+.edu-text span{color:var(--accent);font-weight:500;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-primary{padding:11px 26px;border-radius:10px;background:var(--accent);font-weight:600;font-size:14px;border:none;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+[data-theme="dark"] .btn-primary{color:#07090f;}
+[data-theme="light"] .btn-primary{color:#ffffff;}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-2px);}
+.btn-secondary{padding:11px 26px;border-radius:10px;font-weight:500;font-size:14px;border:1px solid var(--border);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:7px;text-decoration:none;}
+[data-theme="dark"] .btn-secondary{background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.25);}
+[data-theme="light"] .btn-secondary{background:rgba(107,114,128,.1);color:#6b7280;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+.btn-secondary svg{width:14px;height:14px;}
+.btn-outline{padding:11px 26px;border-radius:10px;background:transparent;color:var(--text);font-weight:500;font-size:14px;border:1px solid var(--border);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+.page-header{margin-bottom:40px;}
+.page-header h2{font-family:'Syne',sans-serif;font-size:clamp(26px,4vw,42px);font-weight:800;color:var(--text);margin-bottom:6px;}
+.page-header h2 span{color:var(--accent);}
+.page-header p{font-size:15px;color:var(--muted);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:900px;}
+.about-desc{font-size:15px;line-height:1.8;color:var(--muted);margin:20px 0 28px;}
+.info-row{display:flex;flex-direction:column;gap:12px;}
+.info-item{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text);}
+.info-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;}
+[data-theme="dark"] .info-icon{background:rgba(56,189,248,.1);}
+[data-theme="light"] .info-icon{background:rgba(107,114,128,.1);}
+.info-icon svg{width:14px;height:14px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;transition:border-color .2s,transform .2s;}
+.stat-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.stat-num{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--accent);}
+.stat-label{font-size:13px;color:var(--muted);margin-top:2px;}
+.projects-grid{display:flex;flex-direction:column;gap:20px;max-width:860px;}
+.proj-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 30px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;transition:border-color .25s,transform .25s;cursor:pointer;text-decoration:none;color:inherit;}
+.proj-card:hover{border-color:var(--accent);transform:translateX(6px);}
+.proj-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.proj-badge{font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:999px;}
+[data-theme="dark"] .proj-badge{background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.2);}
+[data-theme="light"] .proj-badge{background:rgba(107,114,128,.1);color:#6b7280;border:1px solid #d1d5db;}
+.proj-desc{font-size:14px;color:var(--muted);line-height:1.7;max-width:500px;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.tag-pill{font-size:12px;padding:4px 12px;border-radius:6px;background:var(--surface);color:var(--text);border:1px solid var(--border);}
+.proj-arrow{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+[data-theme="dark"] .proj-arrow{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:#38bdf8;}
+[data-theme="light"] .proj-arrow{background:rgba(107,114,128,.08);border:1px solid #d1d5db;color:#6b7280;}
+.proj-card:hover .proj-arrow{background:var(--accent);color:#fff;border-color:var(--accent);transform:rotate(-45deg);}
+.proj-arrow svg{width:14px;height:14px;}
+.stack-section{max-width:860px;}
+.stack-group{margin-bottom:32px;}
+.stack-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.stack-grid{display:flex;flex-wrap:wrap;gap:12px;}
+.stack-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:var(--text);transition:all .2s;cursor:default;}
+.stack-item:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+.sdot{width:8px;height:8px;border-radius:50%;}
+.contact-wrap{max-width:600px;}
+.contact-sub{font-size:15px;color:var(--muted);margin-bottom:36px;line-height:1.7;}
+.contact-links{display:flex;flex-direction:column;gap:14px;}
+.contact-link{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 22px;text-decoration:none;color:var(--text);transition:all .22s;}
+.contact-link:hover{border-color:var(--accent);color:var(--accent);transform:translateX(6px);}
+.c-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+[data-theme="dark"] .c-icon{background:rgba(56,189,248,.1);color:#38bdf8;}
+[data-theme="light"] .c-icon{background:rgba(107,114,128,.1);color:#6b7280;}
+.contact-link:hover .c-icon{background:var(--accent);color:#fff;}
+.c-icon svg{width:18px;height:18px;}
+.c-label{font-size:12px;color:var(--muted);margin-bottom:2px;}
+.c-val{font-size:14px;font-weight:500;}
+.glow{position:fixed;pointer-events:none;border-radius:50%;filter:blur(120px);z-index:0;}
+.glow1{width:500px;height:500px;top:-100px;right:10%;}
+.glow2{width:400px;height:400px;bottom:0;left:10%;}
+[data-theme="dark"] .glow1{background:rgba(56,189,248,.04);}
+[data-theme="dark"] .glow2{background:rgba(129,140,248,.03);}
+[data-theme="light"] .glow1,[data-theme="light"] .glow2{display:none;}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:300;width:40px;height:40px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;}
+.hamburger span{width:18px;height:2px;background:var(--text);border-radius:2px;transition:all .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+@media(max-width:768px){
+  .hamburger{display:flex;}
+  .sidebar{width:0;overflow:hidden;transition:width .3s;}
+  .sidebar.open{width:200px;}
+  .sidebar.open .nav-btn{width:160px;justify-content:flex-start;padding-left:16px;gap:12px;border-radius:8px;}
+  .sidebar.open .nav-btn .nav-label{display:block;}
+  .nav-label{display:none;font-size:14px;}
+  .sidebar.open .tooltip{display:none;}
+  .main{margin-left:0;}
+  .page{padding:72px 20px 32px;}
+  .hero h1{font-size:38px;}
+  .about-grid{grid-template-columns:1fr;}
+  .proj-card{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+<button class="hamburger" id="ham" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+
+<nav class="sidebar" id="sidebar">
+  <div class="logo">EF</div>
+  <button class="nav-btn active" onclick="showPage('hero',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span class="nav-label">Inicio</span><span class="tooltip">Inicio</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('about',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    <span class="nav-label">Sobre mí</span><span class="tooltip">Sobre mí</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('projects',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+    <span class="nav-label">Proyectos</span><span class="tooltip">Proyectos</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('stack',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+    <span class="nav-label">Stack</span><span class="tooltip">Stack</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('contact',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    <span class="nav-label">Contacto</span><span class="tooltip">Contacto</span>
+  </button>
+  <div class="sidebar-bottom">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema"></button>
+  </div>
+</nav>
+
+<main class="main">
+  <section class="page active" id="hero">
+    <div class="hero">
+      <div class="hero-tag reveal"><span class="tag-dot"></span>Disponible para proyectos</div>
+      <h1 class="reveal delay-1">Hola, soy<br/><span class="grad">Emanuel Fuduli</span></h1>
+      <div class="role reveal delay-2">Backend & Frontend Developer</div>
+      <div class="desc reveal delay-3">Apasionado por construir aplicaciones modernas integrando inteligencia artificial. Trabajo con JavaScript, React, Next.js y Node.js.</div>
+      <div class="tech-chips reveal delay-3">
+        <div class="chip"><span class="chip-dot" style="background:#f7df1e"></span>JavaScript</div>
+        <div class="chip"><span class="chip-dot" style="background:#61dafb"></span>React</div>
+        <div class="chip"><span class="chip-dot" style="background:#888"></span>Next.js</div>
+        <div class="chip"><span class="chip-dot" style="background:#3c873a"></span>Node.js</div>
+        <div class="chip"><span class="chip-dot" style="background:#718096"></span>Prisma</div>
+        <div class="chip"><span class="chip-dot" style="background:#cc785c"></span>Claude API</div>
+      </div>
+      <div class="edu-strip reveal delay-4">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        <div class="edu-text"><span>Ingeniería Informática</span> · UNLaM · en curso</div>
+      </div>
+      <div class="hero-btns reveal delay-5">
+        <button class="btn-primary" onclick="showPage('projects',document.querySelectorAll('.nav-btn')[2])">Ver proyectos</button>
+        <a class="btn-secondary" href="./CV_Emanuel_Fuduli.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar CV
+        </a>
+        <button class="btn-outline" onclick="showPage('contact',document.querySelectorAll('.nav-btn')[4])">Contacto</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="about">
+    <div class="page-header reveal"><h2>Sobre <span>mí</span></h2><p>Un poco de contexto sobre quién soy</p></div>
+    <div class="about-grid">
+      <div>
+        <div class="about-desc reveal delay-1">Soy Emanuel, estudiante de Ingeniería Informática en la UNLaM. Me enfoco en crear aplicaciones con React y Node.js, y me apasiona integrar IA en proyectos reales — como lo hice en StudyBot y ChatETF con la API de Claude.</div>
+        <div class="info-row">
+          <div class="info-item reveal delay-2"><div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>Argentina, Buenos Aires</div>
+          <div class="info-item reveal delay-3"><div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>Ingeniería Informática — UNLaM, en curso</div>
+          <div class="info-item reveal delay-4"><div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>Español nativo · Inglés B1</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="stat-card reveal-scale delay-1"><div class="stat-num">2</div><div class="stat-label">Proyectos con IA publicados</div></div>
+        <div class="stat-card reveal-scale delay-2"><div class="stat-num">3+</div><div class="stat-label">Tecnologías del stack</div></div>
+        <div class="stat-card reveal-scale delay-3"><div class="stat-num">∞</div><div class="stat-label">Ganas de seguir aprendiendo</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="projects">
+    <div class="page-header reveal"><h2>Mis <span>Proyectos</span></h2><p>Lo que construí hasta ahora</p></div>
+    <div class="projects-grid">
+      <a class="proj-card reveal delay-1" href="https://github.com/emanuelfuduli/StudyBot" target="_blank" rel="noopener">
+        <div>
+          <div class="proj-title">StudyBot <span class="proj-badge">IA</span></div>
+          <div class="proj-desc">Asistente de estudio con inteligencia artificial. Incluye chat conversacional, resumen automático de textos y generador de exámenes personalizados.</div>
+          <div class="proj-tags"><span class="tag-pill">Next.js</span><span class="tag-pill">Claude API</span><span class="tag-pill">React</span></div>
+        </div>
+        <div class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </a>
+      <a class="proj-card reveal delay-2" href="https://github.com/emanuelfuduli/ChatETF" target="_blank" rel="noopener">
+        <div>
+          <div class="proj-title">ChatETF <span class="proj-badge">IA</span></div>
+          <div class="proj-desc">Clon de ChatGPT con historial de conversaciones, login con Google, base de datos relacional y soporte de imágenes.</div>
+          <div class="proj-tags"><span class="tag-pill">Next.js</span><span class="tag-pill">Prisma</span><span class="tag-pill">Claude API</span><span class="tag-pill">Google Auth</span></div>
+        </div>
+        <div class="proj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="page" id="stack">
+    <div class="page-header reveal"><h2>Mi <span>Stack</span></h2><p>Tecnologías que uso y estoy aprendiendo</p></div>
+    <div class="stack-section">
+      <div class="stack-group reveal delay-1">
+        <div class="stack-label">Frontend</div>
+        <div class="stack-grid">
+          <div class="stack-item"><span class="sdot" style="background:#f7df1e"></span>JavaScript</div>
+          <div class="stack-item"><span class="sdot" style="background:#61dafb"></span>React</div>
+          <div class="stack-item"><span class="sdot" style="background:#888"></span>Next.js</div>
+          <div class="stack-item"><span class="sdot" style="background:#e44d26"></span>HTML</div>
+          <div class="stack-item"><span class="sdot" style="background:#264de4"></span>CSS</div>
+        </div>
+      </div>
+      <div class="stack-group reveal delay-2">
+        <div class="stack-label">Backend</div>
+        <div class="stack-grid">
+          <div class="stack-item"><span class="sdot" style="background:#3c873a"></span>Node.js</div>
+          <div class="stack-item"><span class="sdot" style="background:#718096"></span>Prisma</div>
+          <div class="stack-item"><span class="sdot" style="background:#336791"></span>PostgreSQL</div>
+        </div>
+      </div>
+      <div class="stack-group reveal delay-3">
+        <div class="stack-label">Herramientas & IA</div>
+        <div class="stack-grid">
+          <div class="stack-item"><span class="sdot" style="background:#f05032"></span>Git</div>
+          <div class="stack-item"><span class="sdot" style="background:#888"></span>GitHub</div>
+          <div class="stack-item"><span class="sdot" style="background:#007acc"></span>VS Code</div>
+          <div class="stack-item"><span class="sdot" style="background:#cc785c"></span>Claude API</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="contact">
+    <div class="page-header reveal"><h2><span>Contacto</span></h2><p>¿Tenés un proyecto en mente? Hablemos</p></div>
+    <div class="contact-wrap">
+      <div class="contact-sub reveal delay-1">Estoy abierto a colaboraciones, proyectos freelance y oportunidades de aprendizaje.</div>
+      <div class="contact-links">
+        <a class="contact-link reveal delay-2" href="https://github.com/emanuelfuduli" target="_blank" rel="noopener">
+          <div class="c-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
+          <div><div class="c-label">GitHub</div><div class="c-val">github.com/emanuelfuduli</div></div>
+        </a>
+        <a class="contact-link reveal delay-3" href="https://www.linkedin.com/in/emanuel-fuduli-a7151135b/" target="_blank" rel="noopener">
+          <div class="c-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+          <div><div class="c-label">LinkedIn</div><div class="c-val">linkedin.com/in/emanuel-fuduli</div></div>
+        </a>
+        <a class="contact-link reveal delay-4" href="mailto:emanuelfuduli0@gmail.com">
+          <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="c-label">Email</div><div class="c-val">emanuelfuduli0@gmail.com</div></div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('ham').classList.remove('open');
+  setTimeout(triggerReveal,50);
+}
+function triggerReveal(){
+  document.querySelectorAll('.page.active .reveal,.page.active .reveal-scale').forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('visible'),i*30);
+  });
+}
+function toggleTheme(){
+  document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';
+}
+function toggleMobile(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('ham').classList.toggle('open');
+}
+setTimeout(triggerReveal,100);
+</script>
+</body>
+</html>
